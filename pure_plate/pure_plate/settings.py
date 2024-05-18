@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'account',
+    'restaurant'
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = [
+    'account.backend.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',  # 기본 백엔드도 함께 유지
+]
+
+
+AUTH_USER_MODEL = 'account.User'
