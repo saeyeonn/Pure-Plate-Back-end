@@ -1,10 +1,25 @@
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
+from django.contrib.auth import get_user_model
 
-class AccountTests(APITestCase):
-    def test_register_user(self):
-        url = reverse('register')
-        data = {'name': 'test', 'email': 'test@example.com', 'password': 'password123'}
-        response = self.client.post(url, data, format='json')  # POST 요청
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+class LoginLogoutAPITest(APITestCase):
+    def setUp(self):
+        self.user_data = {'name': 'test', 'email': 'test@example.com', 'password': 'testpassword123'}
+        self.user = get_user_model().objects.create_user(email=self.user_data['email'], password=self.user_data['password'], username=self.user_data['name'])
+
+
+    def test_login(self):
+        url = reverse('login')
+        data = {'email': self.user_data['email'], 'password': self.user_data['password']}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('token', response.data)
+
+    def test_logout(self):
+        # 로그인 테스트를 통과한 후에 로그아웃을 테스트합니다.
+        self.client.force_authenticate(user=self.user)
+        url = reverse('logout')
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
