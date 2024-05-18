@@ -13,7 +13,7 @@ class Place(models.Model):
 class Category(models.Model):
     CategoryID = models.AutoField(primary_key=True)
     CategoryName = models.CharField(max_length=50)
-    PlaceID = models.ManyToManyField(Place, related_name='PlaceID')
+    PlaceID = models.ForeignKey('Place', on_delete=models.CASCADE, related_name='categories')
 
 class User(models.Model):
     UserID = models.AutoField(primary_key=True)
