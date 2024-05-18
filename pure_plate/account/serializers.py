@@ -2,7 +2,9 @@ from rest_framework import serializers
 from .models import User
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import authenticate
-
+from django.contrib.auth import authenticate
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -20,26 +22,23 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+
+
+
 class UserLoginSerializer(serializers.Serializer):
-    email = serializers.CharField(max_length=64)
-    password = serializers.CharField(max_length=128, write_only=True)
-    token = serializers.CharField(max_length=255, read_only=True)
+    email = serializers.EmailField()
+    password = serializers.CharField()
 
     def validate(self, data):
-        email = data.get("email", None)
-        password = data.get("password", None)
-        user = authenticate(email=email, password=password)
+        email = data.get('email')
+        password = data.get('password')
 
-        if user is None:
-            return {
-                'email': 'None'
-            }
-        try:
-            update_last_login(None, user)
-        except User.DoesNotExist:
-            raise serializers.ValidationError(
-                'User with given email and password does not exists'
-            )
-        return {
-            'email': user.email
-        }
+        if email and password:
+            user = authenticate(email=email, password=password)
+            if not user:
+                raise serializers.ValidationError('Unable to log in with provided credentials.')
+
+            data['user'] = user
+            return data
+        else:
+            raise serializers.ValidationError('Must include "email" and "password".')
