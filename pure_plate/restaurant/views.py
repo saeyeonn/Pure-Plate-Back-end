@@ -3,6 +3,7 @@ from django.db.models import Count
 from .models import Place, Category
 
 def places_in_categories_view(request):
+
     try:
         category_names = request.GET.get('categories', '')
         if not category_names:  
@@ -43,3 +44,6 @@ def places_in_categories_view(request):
 
     except Exception as e:
         return JsonResponse({'status': 400, 'message': str(e), 'data': []})
+
+
+
