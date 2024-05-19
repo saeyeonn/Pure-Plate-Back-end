@@ -2,8 +2,8 @@ from django.db import models
 from django.db.models import Avg
 from account.models import User 
 
-class Place(models.Model):
-    PlaceID = models.AutoField(primary_key=True)
+class Restaurant(models.Model):
+    RestaurantID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=255, db_index=True)
     Address = models.CharField(max_length=255)
     Latitude = models.DecimalField(max_digits=10, decimal_places=8)
@@ -33,16 +33,16 @@ class Category(models.Model):
 class Review(models.Model):
     ReviewID = models.AutoField(primary_key=True)
     User = models.ForeignKey(User, on_delete=models.CASCADE)
-    Place = models.ForeignKey(Place, on_delete=models.CASCADE)
+    Restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     Rating = models.IntegerField()
     ReviewText = models.TextField()
     VisitDate = models.DateField()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        place = self.Place
+        restaurant = self.Restaurant
 
-        place.reviewCount = Review.objects.filter(Place=place).count()
-        place.avgRating = Review.objects.filter(Place=place).aggregate(total_rating=Avg('Rating'))['total_rating']
+        restaurant.reviewCount = Review.objects.filter(Restaurant=restaurant).count()
+        restaurant.avgRating = Review.objects.filter(Restaurant=restaurant).aggregate(total_rating=Avg('Rating'))['total_rating']
 
-        place.save()
+        restaurant.save()
