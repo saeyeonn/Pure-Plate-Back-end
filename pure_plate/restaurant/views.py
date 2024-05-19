@@ -2,7 +2,9 @@ from django.http import JsonResponse
 from django.db.models import Count
 from .models import Restaurant, Category
 
+
 def restaurant_in_categories_view(request):
+
     try:
         category_names = request.GET.get('categories', '')
         if not category_names:  
@@ -43,3 +45,6 @@ def restaurant_in_categories_view(request):
 
     except Exception as e:
         return JsonResponse({'status': 400, 'message': str(e), 'data': []})
+
+
+

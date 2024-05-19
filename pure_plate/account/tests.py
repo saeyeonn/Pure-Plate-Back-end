@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 class LoginLogoutAPITest(APITestCase):
     def setUp(self):
         self.user_data = {'name': 'test', 'email': 'test@example.com', 'password': 'testpassword123'}
-        self.user = get_user_model().objects.create_user(email=self.user_data['email'], password=self.user_data['password'], username=self.user_data['name'])
+        self.user = get_user_model().objects.create_user(email=self.user_data['email'], password=self.user_data['password'], name=self.user_data['name'])
 
 
     def test_login(self):
