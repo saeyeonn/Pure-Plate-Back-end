@@ -29,7 +29,11 @@ def review(request):
             return JsonResponse({'error': 'User or restaurant not found'}, status=404)
 
         review = Review.objects.create(
-             
+            User=user,
+            Restaurant=restaurant,
+            Rating=rating,
+            ReviewText=review_text,
+            VisitDate=visit_date
         )
 
         return JsonResponse({'message': 'Review created successfully'}, status=201)
