@@ -2,10 +2,12 @@ from django.shortcuts import render
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 from .models import Review
 from account.models import User
 from restaurant.models import Restaurant
 
+@api_view(['POST'])
 @csrf_exempt
 def review(request):
     if request.method == 'POST':
@@ -27,11 +29,7 @@ def review(request):
             return JsonResponse({'error': 'User or restaurant not found'}, status=404)
 
         review = Review.objects.create(
-            User=user,
-            Restaurant=restaurant,
-            Rating=rating,
-            ReviewText=review_text,
-            VisitDate=visit_date
+             
         )
 
         return JsonResponse({'message': 'Review created successfully'}, status=201)
