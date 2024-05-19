@@ -1,30 +1,34 @@
 from django.db import models
+from django.db.models import Avg
+from account.models import User 
 
 class Place(models.Model):
     PlaceID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=255)
+    Name = models.CharField(max_length=255, db_index=True)
     Address = models.CharField(max_length=255)
     Latitude = models.DecimalField(max_digits=10, decimal_places=8)
     Longitude = models.DecimalField(max_digits=11, decimal_places=8)
-    reviewAmount = models.IntegerField(default=0)
-    totalrating = models.IntegerField(default=0)
-    AVGrating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    reviewCount = models.IntegerField(default=0)
+    avgRating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    categories = models.ManyToManyField('Category', related_name='places')
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['Name']),
+        ]
 
 class Category(models.Model):
     CategoryID = models.AutoField(primary_key=True)
-    CategoryName = models.CharField(max_length=50)
-    PlaceID = models.ForeignKey('Place', on_delete=models.CASCADE, related_name='categories')
 
-class User(models.Model):
-    UserID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=100)
-    Email = models.EmailField()
-    Password = models.CharField(max_length=100)
+    CategoryName = models.CharField(max_length=50, db_index=True)
 
-class Favorite(models.Model):
-    FavoriteID = models.AutoField(primary_key=True)
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
-    Place = models.ForeignKey(Place, on_delete=models.CASCADE)
+   
+
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['CategoryName']),
+        ]
 
 class Review(models.Model):
     ReviewID = models.AutoField(primary_key=True)
@@ -33,3 +37,12 @@ class Review(models.Model):
     Rating = models.IntegerField()
     ReviewText = models.TextField()
     VisitDate = models.DateField()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        place = self.Place
+
+        place.reviewCount = Review.objects.filter(Place=place).count()
+        place.avgRating = Review.objects.filter(Place=place).aggregate(total_rating=Avg('Rating'))['total_rating']
+
+        place.save()

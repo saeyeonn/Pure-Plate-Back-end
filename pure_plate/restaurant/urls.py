@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.urls import path
-from .views import places_in_categories_view
+
+from . import views
+
 
 
 urlpatterns = [
-    path('places/',places_in_categories_view, name='places-in-categories')
+    path('places/',views.places_in_categories_view, name='places-in-categories')
 ]
