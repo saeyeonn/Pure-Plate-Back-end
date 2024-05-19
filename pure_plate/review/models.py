@@ -1,13 +1,15 @@
 from django.db import models
-
-from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from account.models import User
 from restaurant.models import Restaurant
 
 class Review(models.Model):
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
-    Restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    Rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    ReviewText = models.TextField()
-    VisitDate = models.DateField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    review_text = models.TextField()
+    visit_date = models.DateField()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.restaurant.update_rating()

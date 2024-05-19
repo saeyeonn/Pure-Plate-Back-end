@@ -3,7 +3,7 @@ from django.db.models import Count
 from .models import Restaurant, Category
 
 
-def restaurant_in_categories_view(request):
+def restaurants_in_categories_view(request):
 
     try:
         category_names = request.GET.get('categories', '')
