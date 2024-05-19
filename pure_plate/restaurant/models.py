@@ -2,12 +2,8 @@ from django.db import models
 from django.db.models import Avg
 
 class Category(models.Model):
-    CategoryID = models.AutoField(primary_key=True)
-
-    CategoryName = models.CharField(max_length=50, db_index=True)
-
-   
-
+    category_id = models.AutoField(primary_key=True)
+    category_name = models.CharField(max_length=50, db_index=True)
 
     class Meta:
         verbose_name_plural = "categories"

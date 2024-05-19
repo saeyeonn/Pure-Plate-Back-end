@@ -25,13 +25,13 @@ def restaurants_in_categories_view(request):
         for category_name in category_names_list:
             category_restaurants = restaurants.filter(categories__CategoryName=category_name)
             category_list = [{
-                'restaurantId': restaurant.RestaurantID,
-                'restaurantName': restaurant.Name,
-                'restaurantAddress': restaurant.Address,
-                'restaurantLatitude': restaurant.Latitude,
-                'restaurantLongitude': restaurant.Longitude,
-                'restaurantReviewCount': restaurant.reviewCount,
-                'restaurantRating': str(restaurant.avgRating),
+                'restaurantId': restaurant.restaurant_id,
+                'restaurantName': restaurant.name,
+                'restaurantAddress': restaurant.address,
+                'restaurantLatitude': restaurant.latitude,
+                'restaurantLongitude': restaurant.longitude,
+                'restaurantReviewCount': restaurant.review_count,
+                'restaurantRating': str(restaurant.avg_rating),
             } for restaurant in category_restaurants]
             data[f"{category_name}List"] = category_list
 

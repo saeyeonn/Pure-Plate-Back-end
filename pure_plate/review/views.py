@@ -37,5 +37,5 @@ def review(request):
         )
 
         return JsonResponse({'message': 'Review created successfully'}, status=201)
-
+    
     return JsonResponse({'error': 'Method not allowed'}, status=405)
