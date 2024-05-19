@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'account',
     'restaurant',
     'review',
+    'favorite'
     
 ]
 
