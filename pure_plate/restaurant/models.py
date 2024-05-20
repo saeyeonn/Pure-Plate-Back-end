@@ -1,44 +1,26 @@
 from django.db import models
 from django.db.models import Avg
-from account.models import User 
-
-class Place(models.Model):
-    PlaceID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=255, db_index=True)
-    Address = models.CharField(max_length=255)
-    Latitude = models.DecimalField(max_digits=10, decimal_places=8)
-    Longitude = models.DecimalField(max_digits=11, decimal_places=8)
-    reviewCount = models.IntegerField(default=0)
-    avgRating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
-    categories = models.ManyToManyField('Category', related_name='places')
-
-    class Meta:
-        indexes = [
-            models.Index(fields=['Name']),
-        ]
 
 class Category(models.Model):
-    CategoryID = models.AutoField(primary_key=True)
-    CategoryName = models.CharField(max_length=50, db_index=True)
+    category_id = models.AutoField(primary_key=True)
+    category_name = models.CharField(max_length=50, db_index=True)
 
     class Meta:
-        indexes = [
-            models.Index(fields=['CategoryName']),
-        ]
+        verbose_name_plural = "categories"
 
-class Review(models.Model):
-    ReviewID = models.AutoField(primary_key=True)
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
-    Place = models.ForeignKey(Place, on_delete=models.CASCADE)
-    Rating = models.IntegerField()
-    ReviewText = models.TextField()
-    VisitDate = models.DateField()
+class Restaurant(models.Model):
+    name = models.CharField(max_length=255, db_index=True)
+    address = models.CharField(max_length=255)
+    latitude = models.DecimalField(max_digits=10, decimal_places=8)
+    longitude = models.DecimalField(max_digits=11, decimal_places=8)
+    review_count = models.IntegerField(default=0)
+    avg_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    categories = models.ManyToManyField(Category, related_name='restaurants')
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        place = self.Place
-
-        place.reviewCount = Review.objects.filter(Place=place).count()
-        place.avgRating = Review.objects.filter(Place=place).aggregate(total_rating=Avg('Rating'))['total_rating']
-
-        place.save()
+    def update_rating(self):
+        self.review_count = self.review_set.count()
+        if self.review_count > 0:
+            self.avg_rating = self.review_set.aggregate(avg_rating=Avg('rating'))['avg_rating']
+        else:
+            self.avg_rating = 0.00
+        self.save()

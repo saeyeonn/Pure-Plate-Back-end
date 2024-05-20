@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'account',
-    'restaurant'
+    'restaurant',
+    'review',
+    'favorite'
+    
 ]
 
 MIDDLEWARE = [
@@ -143,3 +146,4 @@ AUTHENTICATION_BACKENDS = [
 
 
 AUTH_USER_MODEL = 'account.User'
+
