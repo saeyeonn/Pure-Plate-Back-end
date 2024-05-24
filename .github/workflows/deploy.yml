@@ -1,41 +1,40 @@
 name: Deploy to EC2
-on: [push]
+
+on:
+  push:
+    branches:
+      - main  # 또는 배포 브랜치 이름
+
 jobs:
-
-  build:
-    name: Build
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - name: checkout
-      uses: actions/checkout@master
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-    - name: create env file
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_KEY }}
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+    - name: Build Docker image
+      run: docker build -t my-django-app .
+
+    - name: Push Docker image to Docker Hub
+      run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-django-app
+
+    - name: Deploy to EC2
       run: |
-        touch .env
-        echo "${{ secrets.ENV_VARS }}" >> .env
-
-    - name: create remote directory
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ubuntu
-        key: ${{ secrets.KEY }}
-        script: mkdir -p /home/ubuntu/srv/ubuntu
-
-    - name: copy source via ssh key
-      uses: burnett01/rsync-deployments@4.1
-      with:
-        switches: -avzr --delete
-        remote_path: /home/ubuntu/srv/ubuntu/
-        remote_host: ${{ secrets.HOST }}
-        remote_user: ubuntu
-        remote_key: ${{ secrets.KEY }}
-
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ubuntu
-        key: ${{ secrets.KEY }}
-        script: |
-          sh /home/ubuntu/srv/ubuntu/config/scripts/deploy.sh
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/my-django-app
+          docker stop my-django-app || true
+          docker rm my-django-app || true
+          docker run -d -p 8000:8000 --name my-django-app ${{ secrets.DOCKER_HUB_USERNAME }}/my-django-app
+        EOF
