@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'rest_framework.authtoken',
     'account',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'review',
     'favorite'
     
+
 ]
 
 MIDDLEWARE = [
@@ -107,6 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
@@ -116,6 +119,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -139,6 +143,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 AUTHENTICATION_BACKENDS = [
     'account.backend.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',  # 기본 백엔드도 함께 유지
@@ -146,3 +151,4 @@ AUTHENTICATION_BACKENDS = [
 
 
 AUTH_USER_MODEL = 'account.User'
+

@@ -14,4 +14,6 @@
 feature/{function}
 ```
 
+
 - main branch 절대 건들지 않기
+
