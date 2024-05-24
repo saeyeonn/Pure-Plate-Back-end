@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.db.models import Count
 from .models import Restaurant, Category
 
+#/api/restaurants_in_categories?categories=Italian,Chinese,Mexican
 
 def restaurants_in_categories_view(request):
 
@@ -25,11 +26,14 @@ def restaurants_in_categories_view(request):
         for category_name in category_names_list:
             category_restaurants = restaurants.filter(categories__CategoryName=category_name)
             category_list = [{
-                'restaurantId': restaurant.restaurant_id,
+                'restaurantId': restaurant.id,
                 'restaurantName': restaurant.name,
                 'restaurantAddress': restaurant.address,
-                'restaurantLatitude': restaurant.latitude,
-                'restaurantLongitude': restaurant.longitude,
+                'restaurantLatitude': float(restaurant.latitude),
+                'restaurantLongitude': float(restaurant.longitude),
+                'restaurantTime': restaurant.time,
+                'restaurantPhoto': restaurant.photo,
+                'restaurantPhone': restaurant.phone,
                 'restaurantReviewCount': restaurant.review_count,
                 'restaurantRating': str(restaurant.avg_rating),
             } for restaurant in category_restaurants]
@@ -38,7 +42,7 @@ def restaurants_in_categories_view(request):
         response = {
             'status': 200,
             'message': 'Successfully retrieved the restaurant list.',
-            'data': [data]
+            'data': data
         }
 
         return JsonResponse(response)

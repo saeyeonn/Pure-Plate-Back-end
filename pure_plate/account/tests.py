@@ -18,7 +18,6 @@
 #         self.assertIn('token', response.data)
 
 #     def test_logout(self):
-#         # 로그인 테스트를 통과한 후에 로그아웃을 테스트합니다.
 #         self.client.force_authenticate(user=self.user)
 #         url = reverse('logout')
 #         response = self.client.post(url)
