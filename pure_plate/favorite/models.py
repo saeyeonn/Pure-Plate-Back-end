@@ -1,4 +1,6 @@
 from django.db import models
+
+
 from account.models import User
 from restaurant.models import Restaurant
 
@@ -8,3 +10,4 @@ class Favorite(models.Model):
 
     class Meta:
         unique_together = ('user', 'restaurant')
+

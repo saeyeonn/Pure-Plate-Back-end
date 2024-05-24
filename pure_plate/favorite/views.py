@@ -1,3 +1,4 @@
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -54,3 +55,4 @@ def delete_favorites(request):
             return Response({'error': 'Restaurant is not in favorites'}, status=404)
     except (User.DoesNotExist, Restaurant.DoesNotExist):
         return Response({'error': 'User or restaurant not found'}, status=404)
+
