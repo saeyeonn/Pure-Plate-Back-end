@@ -8,7 +8,7 @@ class Review(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     review_text = models.TextField()
-    visit_date = models.TextField()
+    visit_date = models.DateField()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
