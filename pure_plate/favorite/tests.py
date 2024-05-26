@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
@@ -35,3 +36,4 @@ class FavoriteAPITestCase(TestCase):
         response = self.client.post(reverse('delete_favorites'), {'user_id': self.user.id, 'restaurant_id': self.restaurant.id}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Favorite.objects.filter(user=self.user, restaurant=self.restaurant).count(), 0)
+

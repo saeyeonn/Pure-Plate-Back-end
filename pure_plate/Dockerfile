@@ -1,15 +1,22 @@
-FROM python:3.9
+FROM python:3.9.6
 
-ENV PYTHONUNBUFFERED = 1
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-RUN mkdir /app
+# Set work directory
+WORKDIR /code
 
-WORKDIR /app
+# Install dependencies
+COPY requirements.txt /code/
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-COPY requirements.txt /app/
+# Copy project
+COPY . /code/
 
-RUN pip3 install -r requirements.txt
+# Expose the port the app runs on
+EXPOSE 8000
 
-COPY . /app/
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Command to run on container start
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "myproject.wsgi:application"]

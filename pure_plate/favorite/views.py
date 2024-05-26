@@ -1,3 +1,4 @@
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -42,3 +43,4 @@ def delete_favorites(request, restaurant_name):
             return Response({'error': 'Restaurant is not in favorites'}, status=status.HTTP_404_NOT_FOUND)
     except Restaurant.DoesNotExist:
         return Response({'error': 'Restaurant not found'}, status=status.HTTP_404_NOT_FOUND)
+
