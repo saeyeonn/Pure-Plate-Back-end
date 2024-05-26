@@ -31,9 +31,9 @@ def restaurants_in_categories_view(request):
                 'restaurantAddress': restaurant.address,
                 'restaurantLatitude': float(restaurant.latitude),
                 'restaurantLongitude': float(restaurant.longitude),
-                'restaurantTime': restaurant.time,
-                'restaurantPhoto': restaurant.photo,
-                'restaurantPhone': restaurant.phone,
+                # 'restaurantTime': restaurant.time,
+                # 'restaurantPhoto': restaurant.photo,
+                # 'restaurantPhone': restaurant.phone,
                 'restaurantReviewCount': restaurant.review_count,
                 'restaurantRating': str(restaurant.avg_rating),
             } for restaurant in category_restaurants]
