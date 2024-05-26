@@ -20,8 +20,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/account/', include('account.urls')),  # account 앱의 URL 포함
+    path('api/account/', include('account.urls')),
     path('api/restaurant/', include('restaurant.urls')),
     path('api/review/', include('review.urls')),
     path('api/favorite/', include('favorite.urls')),
-
+]
