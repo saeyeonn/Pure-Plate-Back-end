@@ -1,56 +1,28 @@
-from rest_framework import generics, permissions
-from rest_framework.response import Response
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from .models import User
+from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
-from .serializers import UserRegisterSerializer, UserLoginSerializer
+from rest_framework.generics import CreateAPIView
 from django.contrib.auth import authenticate
+from .models import User
+from .serializers import UserSerializer, LoginSerializer
 
+class RegisterView(CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def register(request):
-    if request.method == 'POST':
-        serializer = UserRegisterSerializer(data=request.data)
-        if not serializer.is_valid(raise_exception=True):
-            return Response({"message": "Request Body Error."}, status=status.HTTP_400_BAD_REQUEST)
-
-        if User.objects.filter(email=serializer.validated_data['email']).exists():
-            return Response({"message": "duplicate email"}, status=status.HTTP_409_CONFLICT)
-
-        serializer.save()
-        return Response({"message": "ok"}, status=status.HTTP_201_CREATED)
-
-
-
-from rest_framework.authtoken.models import Token
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def login(request):
-    if request.method == 'POST':
-        serializer = UserLoginSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.validated_data.get('user')
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        username = serializer.validated_data.get('username')
+        password = serializer.validated_data.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
             token, created = Token.objects.get_or_create(user=user)
             return Response({
                 'token': token.key,
-                'message': 'Login successful.'
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({
-                'message': 'Invalid email or password.'
-            }, status=status.HTTP_401_UNAUTHORIZED)
-
-
-
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def logout(request):
-    if request.method == 'POST':
-        request.user.auth_token.delete()
-        return Response({"message": "Logged out successfully."}, status=status.HTTP_200_OK)
-
+                'user_id': user.pk,
+                'username': user.username
+            })
+        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
