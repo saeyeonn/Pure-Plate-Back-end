@@ -28,7 +28,8 @@ class CustomAuthToken(ObtainAuthToken):
             return Response({
                 'token': token.key,
                 'user_id': user.pk,
-                'username': user.username
+                'username': user.username,
+                'nickname': user.nickname
             })
         return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
