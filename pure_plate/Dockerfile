@@ -7,6 +7,7 @@ WORKDIR /pure_plate
 COPY requirements.txt /pure_plate/
 
 # Install dependencies
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Copy the rest of the application code
