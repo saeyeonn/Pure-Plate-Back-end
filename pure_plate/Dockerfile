@@ -4,6 +4,8 @@ WORKDIR /pure_plate
 
 COPY . /pure_plate/.
 
+COPY requirements.txt /pure_plate/
+
 #Dependencies setting
 RUN pip install --no-cache-dir -r requirements.txt
 # RUN apt-get update && apt-get install -y nginx
