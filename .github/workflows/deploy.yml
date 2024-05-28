@@ -29,9 +29,6 @@ jobs:
         source venv/bin/activate
         python -m pip install Pillow
         cd pure_plate
-        echo "check"
-        python manage.py makemigrations 
-        python manage.py migrate
 
   deploy:
       runs-on: ubuntu-latest
