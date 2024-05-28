@@ -45,13 +45,12 @@ INSTALLED_APPS = [
     'review',
     'favorite',
     'feedback',
-    # 'corsheaders'
+    'corsheaders'
 
 ]
 
 MIDDLEWARE = [
-    # 'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
