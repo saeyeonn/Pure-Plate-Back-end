@@ -8,7 +8,6 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
 # Install dependencies
-# 필요 패키지 복사 및 설치
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
@@ -16,9 +15,8 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE 8000
-
-
+EXPOSE 80
 
 # Command to run on container start
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "pure_plate.wsgi:application"]
+
