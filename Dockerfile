@@ -7,6 +7,8 @@ ENV PYTHONUNBUFFERED 1
 # Set work directory
 WORKDIR /pure_plate
 
+COPY . /pure_plate/.
+
 # Install dependencies
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
