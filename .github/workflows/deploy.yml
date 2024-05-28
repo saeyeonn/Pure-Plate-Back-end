@@ -65,5 +65,5 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/pureplate-backend:latest
             docker stop django_pure_plate || true
             docker rm django_pure_plate || true
-            docker run -d --name django_pure_plate -p 80:80 -e DJANGO_SETTINGS_MODULE=pure_plate.settings ${{ secrets.DOCKER_HUB_USERNAME }}/pureplate-backend:latest
+            docker run -d --name django_pure_plate -p 80:8000 -e DJANGO_SETTINGS_MODULE=pure_plate.settings ${{ secrets.DOCKER_HUB_USERNAME }}/pureplate-backend:latest
           EOF
