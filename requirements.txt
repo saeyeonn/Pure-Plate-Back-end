@@ -1,6 +1,4 @@
-Django>=3.2,<4.0
 gunicorn
-django-cors-headers
 asgiref==3.8.1
 certifi==2024.2.2
 cffi==1.16.0
