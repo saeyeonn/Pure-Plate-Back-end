@@ -44,12 +44,13 @@ INSTALLED_APPS = [
     'restaurant',
     'review',
     'favorite',
-     'corsheaders'
+    'feedback',
+    # 'corsheaders'
 
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
