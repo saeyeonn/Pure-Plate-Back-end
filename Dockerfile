@@ -20,5 +20,5 @@ COPY . .
 EXPOSE 80
 
 # Command to run on container start
-CMD gunicorn --bind 0.0.0.0:8000 pure_plate.wsgi:application
+# CMD gunicorn --bind 0.0.0.0:8000 pure_plate.wsgi:application
 
