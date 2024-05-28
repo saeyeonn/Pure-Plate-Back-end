@@ -42,7 +42,7 @@ jobs:
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/pureplate:latest
           docker stop pureplate || true
           docker rm pureplate || true
-          docker run -d -p 443:443 --name pureplate ${{ secrets.DOCKER_HUB_USERNAME }}/pureplate:latest
+          docker run -d -p 8000:8000 --name pureplate ${{ secrets.DOCKER_HUB_USERNAME }}/pureplate:latest
         EOF
         
         
