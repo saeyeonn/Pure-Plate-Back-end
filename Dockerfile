@@ -9,7 +9,7 @@ WORKDIR /app
 
 # Install dependencies
 # 필요 패키지 복사 및 설치
-COPY requirements.txt .
+COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 # Copy project
