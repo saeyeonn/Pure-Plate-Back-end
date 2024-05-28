@@ -1,24 +1,20 @@
 FROM python:3.9.6
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# Set work directory
 WORKDIR /pure_plate
 
 COPY . /pure_plate/.
 
-# Install dependencies
-COPY requirements.txt ./
-RUN pip install -r requirements.txt
+#Dependencies setting
+RUN pip install --no-cache-dir -r requirements.txt
+# RUN apt-get update && apt-get install -y nginx
 
-# Copy project
-COPY . .
+ENV DJANGO_SETTINGS_MODULE=pure_plate.settings
+ENV PYTHONUNBUFFERED 1
 
-# Expose the port the app runs on
+# COPY nginx.conf /etc/nginx/sites-available/default
+# RUN rm -f /etc/nginx/sites-enabled/default && ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled
+# RUN python manage.py collectstatic --noinput
+
+CMD gunicorn --bind 0.0.0.0:8000 pure_/pure_plate/wsgi:application
+
 EXPOSE 80
-
-# Command to run on container start
-# CMD gunicorn --bind 0.0.0.0:8000 pure_plate.wsgi:application
-
