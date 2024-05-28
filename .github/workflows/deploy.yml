@@ -40,8 +40,8 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/pureplate-backend:latest
-          docker stop pureplate || true
-          docker rm pureplate || true
+          docker stop pureplate-backend || true
+          docker rm pureplate-backend || true
           docker run -d -p 8000:8000 --name pureplate-backend ${{ secrets.DOCKER_HUB_USERNAME }}/pureplate-backend:latest
         EOF
         
