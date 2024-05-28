@@ -10,18 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-
-     - name: Install dependencies
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.3
@@ -48,3 +43,6 @@ jobs:
           docker rm pureplate || true
           docker run -d -p 8000:8000 --name pureplate ${{ secrets.DOCKER_HUB_USERNAME }}/pureplate:latest
         EOF
+        
+        
+        
