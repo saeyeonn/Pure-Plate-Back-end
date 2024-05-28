@@ -21,4 +21,4 @@ EXPOSE 8000
 
 
 # Command to run on container start
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "pure_plate:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "pure_plate.wsgi:application"]
