@@ -35,13 +35,12 @@ def review(request):
         try:
             # Validate existence
             user = User.objects.get(pk=user_id)
-            restaurant = Restaurant.objects.get(pk=restaurant_id)
         except (User.DoesNotExist, Restaurant.DoesNotExist):
             return JsonResponse({'error': 'User or restaurant not found'}, status=404)
 
         review = Review.objects.create(
             user=user,
-            restaurant=restaurant,
+            restaurant_id=restaurant_id,
             rating=rating,
             review_text=review_text,
             visit_date=visit_date
